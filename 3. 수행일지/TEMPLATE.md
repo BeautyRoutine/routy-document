@@ -31,6 +31,6 @@ TEMPLATE
 
 ## 2. 강사님 피드백
 
-TEMPLATE
+> (입력칸)
 
 ---
