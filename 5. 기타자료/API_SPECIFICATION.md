@@ -2,9 +2,9 @@
 
 ## 1. 개요
 
--   본 API 상세 명세서는 루티 시스템 내부에서 사용하기 위한 API 사용 방법을 정리한 문서입니다.
--   **통신 프로토콜:** HTTP 기반으로 `GET`, `POST` 방식으로 데이터를 주고받습니다.
--   **사용 라이브러리:** axios
+- 본 API 상세 명세서는 루티 시스템 내부에서 사용하기 위한 API 사용 방법을 정리한 문서입니다.
+- **통신 프로토콜:** HTTP 기반으로 `GET`, `POST` 방식으로 데이터를 주고받습니다.
+- **사용 라이브러리:** axios
 
 ---
 
@@ -12,9 +12,9 @@
 
 ### 2.1 응답 구조
 
--   `resultCode`: HTTP 상태 코드
--   `resultMsg`: 응답 상태를 설명하는 메시지 (대문자 스네이크 케이스)
--   `resultTime`: 서버 응답 시각
+- `resultCode`: HTTP 상태 코드
+- `resultMsg`: 응답 상태를 설명하는 메시지 (대문자 스네이크 케이스)
+- `resultTime`: 서버 응답 시각
 
 #### 성공 응답 예시
 
@@ -29,21 +29,21 @@
 }
 ```
 
--   `resultCode`: 200 (고정)
--   `resultMsg`: "SUCCESS" (고정)
+- `resultCode`: 200 (고정)
+- `resultMsg`: "SUCCESS" (고정)
 
 #### 에러 응답 예시
 
 ```json
 {
-    "resultCode": 400,
-    "resultMsg": "BAD_REQUEST",
-    "resultTime": "2025-10-01 09:00:00"
+  "resultCode": 400,
+  "resultMsg": "BAD_REQUEST",
+  "resultTime": "2025-10-01 09:00:00"
 }
 ```
 
--   `resultCode`: 아래 에러 코드표 참고
--   `resultMsg`: 아래 에러 코드표 참고
+- `resultCode`: 아래 에러 코드표 참고
+- `resultMsg`: 아래 에러 코드표 참고
 
 ##### 에러 코드표
 
@@ -68,10 +68,10 @@
 
 ```json
 {
-    "type": "",
-    "keyword": "",
-    "page": 1,
-    "limit": 20
+  "type": "",
+  "keyword": "",
+  "page": 1,
+  "limit": 20
 }
 ```
 
@@ -86,10 +86,10 @@
 
 ```json
 {
-    "resultCode": 200,
-    "resultMsg": "SUCCESS",
-    "resultTime": "2025-10-01 09:00:00",
-    "data": [{}, {}]
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-10-01 09:00:00",
+  "data": [{}, {}]
 }
 ```
 
@@ -321,6 +321,7 @@
      "data": {
         "products": [
             {
+                "prdNo": 123,
                 "prdName": "샘플",
                 "prdPrice": 25000,
                 "prdImg": "image/src/product/123.jpg"
@@ -338,11 +339,11 @@
 
 ```
 
-| 필드              | 타입   | 설명              |
-| ----------------- | ------ | ----------------- |
-| `data`            | Object | 응답 데이터 객체  |
-| `data.products`   | Array  | 상품 일부 정 목록 |
-| `data.pagination` | Object | 페이징 정보       |
+| 필드              | 타입   | 설명                 |
+| ----------------- | ------ | -------------------- |
+| `data`            | Object | 응답 데이터 객체     |
+| `data.products`   | Array  | 상품 일부 정보, 목록 |
+| `data.pagination` | Object | 페이징 정보          |
 
 ---
 
@@ -360,6 +361,7 @@
   "resultMsg": "SUCCESS",
   "resultTime": "2025-10-01 09:00:00",
   "data": {
+    "prdNo": 123,
     "prdName": "샘플",
     "prdPrice": 25000,
     "prdVolume": 200,
@@ -374,6 +376,7 @@
 
 | 필드          | 타입   | 설명                  |
 | ------------- | ------ | --------------------- |
+| `prdNo`       | Int    | 상품 고유 id          |
 | `data`        | Object | 사용자 제공 상세 정보 |
 | `prdName`     | String | 상품명                |
 | `prdPrice`    | Int    | 상품가격              |
