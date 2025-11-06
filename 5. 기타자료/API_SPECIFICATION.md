@@ -394,3 +394,214 @@
 ### 3.3 주문 API
 
 > (작성 예정)
+
+## 6. 리뷰 API
+
+### 6.1 리뷰 목록 조회 - [GET] `/api/products/{prdNo}/reviews`
+
+- 현재 상품에 달린 리뷰 목록을 조회합니다.
+
+### Path Variable
+
+| **변수**    | **타입** | **필수 여부** | **설명**                               |
+| ----------- | -------- | ------------- | -------------------------------------- |
+| `productId` | `Number` | Y             | `PRODUCT` 테이블의 `prdNo` (상품 번호) |
+
+### Query Parameters
+
+| **변수** | **타입** | **필수 여부** | 기본값  | **설명**                            |
+| -------- | -------- | ------------- | ------- | ----------------------------------- |
+| `page`   | `int`    | N             | 1       | 조회할 페이지의 번호                |
+| `limit`  | `int`    | N             | 10      | 한 페이지에서 보여줄 리뷰 수        |
+| `sort`   | `String` | N             | lastest | 정렬 기준(lastest, like, rating 등) |
+
+### Response Body -총점, 리뷰들, 몇개 보여줄지
+
+```json
+{
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-11-06 14:30:00",
+  "data": {
+    "summary": {
+      "totalCount": 125,
+      "averageRating": 4.5
+    },
+    "reviews": [
+      {
+        "revNo": 101,
+        "userName": "beaut***",
+        "revRank": "A",
+        "revStar": 5,
+        "revText": "수분보습 완전 최고. 인생템입니다.",
+        "revImg": "https://.../img.jpg",
+        "revDate": "2025-11-05",
+        "likeCount": 15
+      },
+      { ... }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "totalCount": 125,
+      "totalPages": 13
+    }
+  }
+}
+```
+
+---
+
+### 6.2 리뷰 작성 - [Post] `/api/reviews`
+
+특정 제품에 대한 리뷰를 새로 작성합니다.
+
+### Request Body
+
+```json
+{
+  "userNo": 789,
+  "prdNo": 123,
+  "revStar": 5,
+  "revText": "너무 좋아요. 인생템입니다.",
+  "revImg": "https://.../img.jpg"
+}
+```
+
+| 필드      | 타입   | 최대 길이 | 필수 여부 | 설명             |
+| --------- | ------ | --------- | --------- | ---------------- |
+| `userNo`  | int    | 7         | Y         | 사용자 번호      |
+| `prdNo`   | int    | 7         | Y         | 제품 번호        |
+| `revStar` | int    | 2         | Y         | 제품에 대한 별점 |
+| `revText` | String | 미정      | Y         | 리뷰 텍스트      |
+| `revImg`  | String | VAR2(255) | Y         | 리뷰 이미지      |
+
+### Response Body -리뷰 반환
+
+```json
+{
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-11-06 14:30:00",
+  "data": {
+    "revNo": 101,
+    "userName": "beaut***",
+    "revRank": "A",
+    "revStar": 5,
+    "revText": "수분보습 완전 최고. 인생템입니다.",
+    "revImg": "https://.../img.jpg",
+    "revDate": "2025-11-05",
+    "likeCount": 0
+  }
+}
+```
+
+---
+
+### 6.3 리뷰 수정 - [PUT] `/api/reviews/{revNo}`
+
+설명 : revNo에 해당하는 리뷰를 수정합니다.
+
+### Path Variable
+
+| **변수** | **타입** | **필수 여부** | **설명**                              |
+| -------- | -------- | ------------- | ------------------------------------- |
+| `revNo`  | Int      | Y             | `Review` 테이블의 `revNo` (리뷰 번호) |
+
+---
+
+### Request Body
+
+```json
+{
+  "revStar": 5,
+  "revText": "평생 이것만 써도 될듯.",
+  "revImg": "https://.../img.jpg"
+}
+```
+
+| 필드      | 타입   | 최대 길이 | 필수 여부 | 설명             |
+| --------- | ------ | --------- | --------- | ---------------- |
+| `revStar` | int    | 2         | Y         | 제품에 대한 별점 |
+| `revText` | String | 미정      | Y         | 리뷰 텍스트      |
+| `revImg`  | String | VAR2(255) | Y         | 리뷰 이미지      |
+
+---
+
+### 6.4 리뷰 삭제 - [DELETE] `/api/reviews/{revNo}`
+
+설명 : revNo에 해당하는 리뷰를 삭제합니다.
+
+### Path Variable
+
+| **변수** | **타입** | **필수 여부** | **설명**                              |
+| -------- | -------- | ------------- | ------------------------------------- |
+| `revNo`  | Int      | Y             | `Review` 테이블의 `revNo` (리뷰 번호) |
+
+### Response Body
+
+```json
+{
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-11-06 14:30:00"
+}
+```
+
+---
+
+### 6.5 리뷰 ‘좋아요’ - [POST] `/api/reviews/{revNo}/like`
+
+설명 : revNo에 해당하는 리뷰에 좋아요를 누릅니다.
+
+(REVIEW_UPDOWN 테이블에 추가)(재요청시 좋아요 취소-DELETE)
+
+### Path Variable
+
+| **변수** | **타입** | **필수 여부** | **설명**                              |
+| -------- | -------- | ------------- | ------------------------------------- |
+| `revNo`  | Int      | Y             | `Review` 테이블의 `revNo` (리뷰 번호) |
+
+### Response Body
+
+```json
+{
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "data": {
+    "revNo": 101,
+    "likeCount": 16
+  }
+}
+```
+
+---
+
+### 6.6 리뷰 신고 - [POST] `/api/reviews/{revNo}/report`
+
+설명 : revNo에 해당하는 리뷰를 신고합니다.
+
+### Path Variable
+
+| **변수** | **타입** | **필수 여부** | **설명**                              |
+| -------- | -------- | ------------- | ------------------------------------- |
+| `revNo`  | Int      | Y             | `Review` 테이블의 `revNo` (리뷰 번호) |
+
+### Request Body
+
+```json
+{
+  "reportReason": "스팸/광고성 댓글입니다.(예시임)"
+}
+```
+
+### Response Body
+
+```json
+{
+  "resultCode": 200,
+  "resultMsg": "SUCCESS"
+}
+```
+
+---
