@@ -605,3 +605,103 @@
 ```
 
 ---
+
+## 7. 성분 API
+
+### 7.1 성분 목록 조회 - [GET] `/api/products/{prdNo}/ingredients`
+
+- 현재 상품이 가지고 있는 성분에 대한 목록을 조회합니다.
+
+### Path Variable
+
+| **변수** | **타입** | **필수 여부** | **설명**                               |
+| -------- | -------- | ------------- | -------------------------------------- |
+| `prdNo`  | int      | Y             | `PRODUCT` 테이블의 `prdNo` (상품 번호) |
+
+### Response Body -총점, 리뷰들, 몇개 보여줄지
+
+```json
+{
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-11-07 10:30:00",
+  "data": {
+   "totalCount": 25,
+    "ingredients": [
+      {
+        "ingNo": 101,
+        "ingName": "정제수",
+        "ingEngName": "Water",
+        "ingAllergen": 0, // 알레르기 유발 (0: false)
+        "ingDanger": 0,   // 20가지 주의 (0: false)
+        "ingFunctional": "여드름"
+      },
+      {
+        "ingNo": 102,
+        "ingName": "부틸렌글라이콜",
+        "ingEngName": "Butyl...",
+        "ingAllergen": 1, // 알레르기 유발 (1: true)
+        "ingDanger": 0,
+        "ingFunctional": "각질 제거"
+      },
+      { ... }
+    ]
+  }
+}
+```
+
+---
+
+### 7.2 성분 상세 조회 - [GET] `/api/ingredients/{ingNo}`
+
+- 현재 상품이 가지고 있는 성분에 대한 목록을 조회합니다.
+
+### Path Variable
+
+| **변수** | **타입** | **필수 여부** | **설명**                                  |
+| -------- | -------- | ------------- | ----------------------------------------- |
+| `ingNo`  | int      | Y             | `INGREDIENTS`테이블의 `ingNo` (상품 번호) |
+
+### Response Body -총점, 리뷰들, 몇개 보여줄지
+
+```json
+{
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-11-07 10:30:00",
+  "data": {
+    "ingNo": 102,
+    "ingName": "부틸렌글라이콜",
+    "ingEngName": "Butyl...",
+    "ingDesc": "피부에 수분을...", //설명
+    "ingAllergen": 1,
+    "ingDanger": 0,
+    "ingFunctional": "보습", //기능성(식약처 인증)
+    "ingGrpName": "~~~계열",
+
+    "effects": {
+      "positive": [
+        {
+          "effName": "피부 보습",
+          "effAim": "수분 공급",
+          "effSkin": 2
+        },
+        {
+          "effName": "수분 증발 차단",
+          "effAim": "피부 보호",
+          "effSkin": 2
+        }
+      ],
+      "negative": [
+        {
+          "effName": "피부 자극",
+          "effAim": "민감성 주의",
+          "effSkin": 3
+        }
+      ]
+    }
+  }
+}
+```
+
+---
