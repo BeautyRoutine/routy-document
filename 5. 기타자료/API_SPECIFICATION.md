@@ -202,6 +202,38 @@
 
 ---
 
+### [GET] `/api/users/{userNo}/profile` : 마이페이지 - 사용자 프로필 조회
+
+> 사용자의 기본 프로필 정보를 조회하는 API입니다.
+> {userNo}는 필수 Path Variable이며 조회할 회원 번호를 의미합니다.
+
+### 💬 Response Example
+
+```json
+{
+    "resultCode": 200,
+    "resultMsg": "SUCCESS",
+    "resultTime": "2025-10-01T09:00:00",
+    "data": {
+        "userNo": 1,
+        "userName": "김하연",
+        "userLevel": 11,
+        "reviewCount": 1,
+        "points": 1000
+    }
+}
+```
+
+| 필드        | 타입    | 설명         |
+| ----------- | ------- | ------------ |
+| userNo      | Integer | 회원 번호    |
+| userName    | String  | 회원 이름    |
+| userLevel   | Integer | 회원 등급    |
+| reviewCount | Integer | 작성 리뷰 수 |
+| points      | Integer | 누적 포인트  |
+
+---
+
 ## 3.2. 상품
 
 ### [GET] `/api/products` : 상품 목록 조회
@@ -286,23 +318,32 @@
         "prdMainCate": "스킨/케어",
         "prdSubCate": "크림",
         "prdImg": "image/src/blabla/123.jpg",
-        "prdDesc": "제품설명입니다"
+        "images": {
+            "gallery": ["image/이미지 경로1", "image/이미지 경로2"],
+            "detail": ["image/이미지 경로3"]
+        },
+        "prdDesc": "제품설명입니다",
+        "cnt": 100
     }
 }
 ```
 
-| 필드          | 타입   | 최대 길이 | 설명                  |
-| ------------- | ------ | --------- | --------------------- |
-| `data`        | Object |           | 사용자 제공 상세 정보 |
-| `prdName`     | String |           | 상품명                |
-| `prdPrice`    | Int    |           | 상품가격              |
-| `prdVolume`   | Int    |           | 용량(ml)              |
-| `prdCompany`  | String |           | 제조사                |
-| `prdMainCate` | String |           | 상품 대분류           |
-| `prdSubCate`  | String |           | 상품 소분류           |
-| `prdImg`      | String |           | 상품 이미지 경로      |
-| `prdDesc`     | String |           | 상품 상세 설명        |
-| `prdNo`       | int    |           | 상품 번호             |
+| 필드             | 타입         | 최대 길이 | 설명                            |
+| ---------------- | ------------ | --------- | ------------------------------- |
+| `data`           | Object       |           | 사용자 제공 상세 정보           |
+| `prdName`        | String       |           | 상품명                          |
+| `prdPrice`       | Int          |           | 상품가격                        |
+| `prdVolume`      | Int          |           | 용량(ml)                        |
+| `prdCompany`     | String       |           | 제조사                          |
+| `prdMainCate`    | String       |           | 상품 대분류                     |
+| `prdSubCate`     | String       |           | 상품 소분류                     |
+| `prdImg`         | String       |           | 상품 이미지 경로(썸네일or 삭제) |
+| `prdDesc`        | String       |           | 상품 상세 설명                  |
+| `prdNo`          | int          |           | 상품 번호                       |
+| `images`         | Object       |           | 상품이미지 객체                 |
+| `images.gallery` | List<String> |           | 상단 상품 이미지 목록           |
+| `iamges.detail`  | List<String> |           | 상품 상세 설명 이미지           |
+| `cnt`            | int          |           | 누적된 유효 리뷰 수             |
 
 ---
 
