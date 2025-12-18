@@ -18,9 +18,10 @@
     -   [3.1 회원](#31-회원)
     -   [3.2 상품](#32-상품)
     -   [3.3 장바구니](#33-장바구니)
-    -   [3.4 관심상품](#34-관심-상품)
+    -   [3.4 좋아요](#34-좋아요)
     -   [3.5 성분](#35-성분)
     -   [3.6 리뷰](#36-리뷰)
+    -   [3.7 결제](#37-결제)
 
 -   [4. 관리자 API - 8085](#4-관리자-api---8085)
     -   [4.1 회원](#41-회원)
@@ -577,66 +578,41 @@
 
 ## 3.3. 장바구니
 
-### [GET] `/api/cart` : 장바구니 목록 조회
+### [GET] `/api/cart/list` : 장바구니 목록 조회
 
 > 현재 유저의 장바구니 목록 전체를 조회합니다.
 
-### 🛎️ Request Body
-
-```json
-
-```
-
-| 필드     | 타입   | 최대 길이 | 필수 / 선택 | 설명 |
-| -------- | ------ | --------- | ----------- | ---- |
-| `필드명` | String | 100       | 필수        | 설명 |
-|          |        |           |             |      |
+> JWT 토큰 Authorization 헤더를 통해 사용자 userNo 식별 
 
 ### 💬 Response Example
 
 ```json
 {
-    "resultCode": 200,
-    "resultMsg": "SUCCESS",
-    "resultTime": "2025-11-04 16:30:00",
-    "data": {
-        "summary": {
-            "totalProductAmount": 98000,
-            "deliveryFee": 0,
-            "finalPaymentAmount": 98000
-        },
-        "items": [
-            {
-                "cartItemId": 101,
-                "productId": 1,
-                "name": "하이드레이팅 세럼",
-                "brand": "글로우랩",
-                "price": 28000,
-                "quantity": 1,
-                "imageUrl": "https://.../img.jpg",
-                "selected": true,
-                "skinAlert": { "type": "recommend", "message": "..." }
-            },
-            {
-                "cartItemId": 102,
-                "productId": 2,
-                "name": "비타민 C 토너",
-                "brand": "글로우랩",
-                "price": 28000,
-                "quantity": 2,
-                "imageUrl": "https://.../img2.jpg",
-                "selected": false,
-                "skinAlert": null
-            }
-        ]
-    }
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-11-04 16:30:00",
+  "data": {
+    "summary": {
+      "totalProductAmount": 98000,
+      "deliveryFee": 0,
+      "finalPaymentAmount": 98000
+    },
+    "items": [
+      {
+        "cartItemId": 101,
+        "productId": 1,
+        "name": "하이드레이팅 세럼",
+        "brand": "글로우랩",
+        "price": 28000,
+        "quantity": 1,
+        "imageUrl": "https://.../img.jpg",
+        "selected": true,
+        "skinAlert": { "type": "warning", "message": "알레르기 유발 성분 포함" }
+      }
+    ]
+  }
 }
 ```
-
-| 필드     | 타입   | 최대 길이 | 설명         |
-| -------- | ------ | --------- | ------------ |
-| `필드명` | String | 100       | 회원 고유 ID |
-
 ---
 
 ### [POST] `/api/cart/items` : 장바구니 상품 추가
@@ -654,61 +630,45 @@
 
 | 필드     | 타입   | 최대 길이 | 필수 / 선택 | 설명 |
 | -------- | ------ | --------- | ----------- | ---- |
-| `필드명` | String | 100       | 필수        | 설명 |
-|          |        |           |             |      |
+| `productId` | Long |  | 필수 | 추가할 상품 고유 ID |
+| `quantity` | Integer |  | 필수 | 추가할 수량 (최소 1) |
 
 ### 💬 Response Example
 
 ```json
 {
-    "resultCode": 200,
-    "resultMsg": "SUCCESS",
-    "resultTime": "2025-11-04 16:30:00",
-    "data": {
-        "summary": {
-            "totalProductAmount": 98000,
-            "deliveryFee": 0,
-            "finalPaymentAmount": 98000
-        },
-        "items": [
-            {
-                "cartItemId": 101,
-                "productId": 1,
-                "name": "하이드레이팅 세럼",
-                "brand": "글로우랩",
-                "price": 28000,
-                "quantity": 1,
-                "imageUrl": "https://.../img.jpg",
-                "selected": true,
-                "skinAlert": { "type": "recommend", "message": "..." }
-            },
-            {
-                "cartItemId": 102,
-                "productId": 2,
-                "name": "비타민 C 토너",
-                "brand": "글로우랩",
-                "price": 28000,
-                "quantity": 2,
-                "imageUrl": "https://.../img2.jpg",
-                "selected": false,
-                "skinAlert": null
-            }
-        ]
-    }
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-11-04 16:30:00",
+  "data": {
+    "summary": {
+      "totalProductAmount": 98000,
+      "deliveryFee": 0,
+      "finalPaymentAmount": 98000
+    },
+    "items": [
+      {
+        "cartItemId": 101,
+        "productId": 1,
+        "name": "하이드레이팅 세럼",
+        "brand": "글로우랩",
+        "price": 28000,
+        "quantity": 1,
+        "imageUrl": "https://.../img.jpg",
+        "selected": true,
+        "skinAlert": { "type": "warning", "message": "알레르기 유발 성분 포함" }
+      }
+    ]
+  }
 }
 ```
-
-| 필드     | 타입   | 최대 길이 | 설명         |
-| -------- | ------ | --------- | ------------ |
-| `필드명` | String | 100       | 회원 고유 ID |
-|          |        |           |              |
-
 ---
 
 ### [PATCH] `/api/cart/items/{cartItemId}` : 상품 수량 변경
 
-> 장바구니에 담긴 특정 상품의 **수량** 또는 **선택 여부**를 변경합니다.
-> `{cartItemId}` : `CART` 테이블의 `cartNo` (장바구니 항목 ID)
+> 장바구니에 담긴 특정 상품의 수량의 +1 or -1 변경합니다.
+
+> {cartItemId} : CART 테이블의 cartNo (장바구니 항목 ID)
 
 ### 🛎️ Request Body
 
@@ -720,54 +680,37 @@
 
 | 필드       | 타입 | 최대 길이 | 필수 / 선택 | 설명                      |
 | ---------- | ---- | --------- | ----------- | ------------------------- |
-| `quantity` | Int  |           | 필수        | 변경 안 할 경우 필드 제외 |
+| `quantity` | Integer |           | 필수        | 변경할 수량. 0이 전달되면 해당 항목은 삭제 |
 
 ### 💬 Response Example
 
 ```json
 {
-    "resultCode": 200,
-    "resultMsg": "SUCCESS",
-    "resultTime": "2025-11-04 16:30:00",
-    "data": {
-        "summary": {
-            "totalProductAmount": 98000,
-            "deliveryFee": 0,
-            "finalPaymentAmount": 98000
-        },
-        "items": [
-            {
-                "cartItemId": 101,
-                "productId": 1,
-                "name": "하이드레이팅 세럼",
-                "brand": "글로우랩",
-                "price": 28000,
-                "quantity": 1,
-                "imageUrl": "https://.../img.jpg",
-                "selected": true,
-                "skinAlert": { "type": "recommend", "message": "..." }
-            },
-            {
-                "cartItemId": 102,
-                "productId": 2,
-                "name": "비타민 C 토너",
-                "brand": "글로우랩",
-                "price": 28000,
-                "quantity": 2,
-                "imageUrl": "https://.../img2.jpg",
-                "selected": false,
-                "skinAlert": null
-            }
-        ]
-    }
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-11-04 16:30:00",
+  "data": {
+    "summary": {
+      "totalProductAmount": 98000,
+      "deliveryFee": 0,
+      "finalPaymentAmount": 98000
+    },
+    "items": [
+      {
+        "cartItemId": 101,
+        "productId": 1,
+        "name": "하이드레이팅 세럼",
+        "brand": "글로우랩",
+        "price": 28000,
+        "quantity": 1,
+        "imageUrl": "https://.../img.jpg",
+        "selected": true,
+        "skinAlert": { "type": "warning", "message": "알레르기 유발 성분 포함" }
+      }
+    ]
+  }
 }
 ```
-
-| 필드     | 타입   | 최대 길이 | 설명         |
-| -------- | ------ | --------- | ------------ |
-| `필드명` | String | 100       | 회원 고유 ID |
-|          |        |           |              |
-
 ---
 
 ### [DELETE] `/api/cart/items` : 상품 삭제
@@ -790,201 +733,213 @@
 
 ```json
 {
-    "resultCode": 200,
-    "resultMsg": "SUCCESS",
-    "resultTime": "2025-11-04 16:30:00",
-    "data": {
-        "summary": {
-            "totalProductAmount": 98000,
-            "deliveryFee": 0,
-            "finalPaymentAmount": 98000
-        },
-        "items": [
-            {
-                "cartItemId": 101,
-                "productId": 1,
-                "name": "하이드레이팅 세럼",
-                "brand": "글로우랩",
-                "price": 28000,
-                "quantity": 1,
-                "imageUrl": "https://.../img.jpg",
-                "selected": true,
-                "skinAlert": { "type": "recommend", "message": "..." }
-            },
-            {
-                "cartItemId": 102,
-                "productId": 2,
-                "name": "비타민 C 토너",
-                "brand": "글로우랩",
-                "price": 28000,
-                "quantity": 2,
-                "imageUrl": "https://.../img2.jpg",
-                "selected": false,
-                "skinAlert": null
-            }
-        ]
-    }
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-11-04 16:30:00",
+  "data": {
+    "summary": {
+      "totalProductAmount": 98000,
+      "deliveryFee": 0,
+      "finalPaymentAmount": 98000
+    },
+    "items": [
+      {
+        "cartItemId": 101,
+        "productId": 1,
+        "name": "하이드레이팅 세럼",
+        "brand": "글로우랩",
+        "price": 28000,
+        "quantity": 1,
+        "imageUrl": "https://.../img.jpg",
+        "selected": true,
+        "skinAlert": { "type": "warning", "message": "알레르기 유발 성분 포함" }
+      }
+    ]
+  }
 }
 ```
-
-| 필드     | 타입   | 최대 길이 | 설명         |
-| -------- | ------ | --------- | ------------ |
-| `필드명` | String | 100       | 회원 고유 ID |
-|          |        |           |              |
-
 ---
+### [GET] `/api/users/{userId}/cart/count` : 장바구니 항목 수 조회
 
-## 3.4. 관심 상품
+> 특정 상품 회원의 장바구니에 담긴 상품의 총 개수를 조회합니다.
 
-### [GET] `/api/dibs` : 관심 상품 목록 조회
+> JWT 토큰 Authorization 헤더를 통해 사용자 userNo 식별
 
-> 현재 유저가 관심 등록한 모든 상품 목록을 조회합니다.
-
-### 🛎️ Request Body
-
-```json
-
-```
-
-필요한 설명 있으면 여기에 텍스트 추가하고 아니면 표만 작성해주세요
-
+### 🛎️ Requet Parameter (Path Variable)
 | 필드     | 타입   | 최대 길이 | 필수 / 선택 | 설명 |
 | -------- | ------ | --------- | ----------- | ---- |
-| `필드명` | String | 100       | 필수        | 설명 |
-|          |        |           |             |      |
+| `Path Parameter` | String |  | 필수        | 개수를 조회할 회원 고유 ID( {userId} ) |
+
 
 ### 💬 Response Example
 
 ```json
 {
-    "resultCode": 200,
-    "resultMsg": "SUCCESS",
-    "resultTime": "2025-11-05 15:10:00",
-    "data": {
-        "items": [
-            {
-                "dibNo": 1,
-                "productId": 101,
-                "name": "하이드레이팅 세럼",
-                "brand": "글로우랩",
-                "price": 28000,
-                "imageUrl": "https://.../img.jpg",
-                "prdStock": 50
-            },
-            {
-                "dibNo": 2,
-                "productId": 102,
-                "name": "비타민 C 토너",
-                "brand": "퓨어스킨",
-                "price": 35000,
-                "imageUrl": "https://.../img2.jpg",
-                "prdStock": 0
-            }
-        ]
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-11-04 16:30:00",
+  "data": {
+    "count": 3
+  }
+}
+```
+---
+
+
+## 3.4. 좋아요
+
+### [GET] `/api/likes` : 좋아요 목록 조회
+
+> 현재 유저가 좋아요 한 모든 상품 목록을 조회합니다.
+
+
+| 필드     | 타입   | 최대 길이 | 필수 / 선택 | 설명 |
+| -------- | ------ | --------- | ----------- | ---- |
+| (인증 헤더) | JWT 토큰 | 100       | 필수 | Authorization 헤더를 통해 사용자 userNo를 식별합니다. |
+| type | String |           |  선택  | 좋아요 유형 (기본값: PRODUCT) |
+
+
+### 💬 Response Example
+
+```json
+{
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-11-04 16:30:00",
+  "data": [
+    {
+      "likeId": 501,
+      "itemId": 10,
+      "name": "카밍 수딩 마스크",
+      "brand": "시크릿 네이처",
+      "price": 32000,
+      "imageUrl": "https://.../mask_img.jpg",
+      "likeDate": "2025-12-16"
+    },
+    {
+      "likeId": 502,
+      "itemId": 20,
+      "name": "에너지 부스팅 세럼",
+      "brand": "퓨어 바이탈",
+      "price": 45000,
+      "imageUrl": "https://.../serum_img.jpg",
+      "likeDate": "2025-12-15"
     }
+  ]
 }
 ```
 
 상품 없으면 items는 `[]`
 
-| 필드     | 타입   | 최대 길이 | 설명         |
-| -------- | ------ | --------- | ------------ |
-| `필드명` | String | 100       | 회원 고유 ID |
-|          |        |           |              |
-
 ---
 
-### [Post] `/api/dibs` : 관심 등록
+### [Post] `/api/likes/{productId}` : 좋아요 추가
 
-> 특정 상품을 관심 목록에 추가합니다.
+> 특특정 상품을 유저의 좋아요 목록에 추가합니다.
 
 ### 🛎️ Request Body
 
-```json
-{
-    "productId": 3
-}
-```
-
-필요한 설명 있으면 여기에 텍스트 추가하고 아니면 표만 작성해주세요
 
 | 필드        | 타입     | 최대 길이 | 필수 / 선택 | 설명                       |
 | ----------- | -------- | --------- | ----------- | -------------------------- |
-| `productId` | `Number` |           | 필수        | `PRODUCT` 테이블의 `prdNo` |
-|             |          |           |             |                            |
+| `Path Parameter` | Long |   | 필수 | 좋아요할 상품 고유 ID |
+| `type` | String |  | 선택 | 좋아요 유형 (기본값: PRODUCT) |
 
 ### 💬 Response Example
 
 ```json
 {
-    "resultCode": 200,
-    "resultMsg": "SUCCESS",
-    "resultTime": "2025-11-05 15:10:00",
-    "data": {
-        "items": [
-            {
-                "dibNo": 1,
-                "productId": 101,
-                "name": "하이드레이팅 세럼",
-                "brand": "글로우랩",
-                "price": 28000,
-                "imageUrl": "https://.../img.jpg",
-                "prdStock": 50
-            },
-            {
-                "dibNo": 2,
-                "productId": 102,
-                "name": "비타민 C 토너",
-                "brand": "퓨어스킨",
-                "price": 35000,
-                "imageUrl": "https://.../img2.jpg",
-                "prdStock": 0
-            }
-        ]
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-11-04 16:30:00",
+  "data": [
+    {
+      "likeId": 501,
+      "itemId": 10,
+      "name": "카밍 수딩 마스크",
+      "brand": "시크릿 네이처",
+      "price": 32000,
+      "imageUrl": "https://.../mask_img.jpg",
+      "likeDate": "2025-12-16"
+    },
+    {
+      "likeId": 502,
+      "itemId": 20,
+      "name": "에너지 부스팅 세럼",
+      "brand": "퓨어 바이탈",
+      "price": 45000,
+      "imageUrl": "https://.../serum_img.jpg",
+      "likeDate": "2025-12-15"
     }
+  ]
 }
 ```
-
-상품 없으면 items는 `[]`
-
-| 필드     | 타입   | 최대 길이 | 설명         |
-| -------- | ------ | --------- | ------------ |
-| `필드명` | String | 100       | 회원 고유 ID |
-|          |        |           |              |
-
 ---
 
-### [DELETE] `/api/dibs/{productId}` : 관심 해제
+### [DELETE] `/api/likes/{productId}` : 좋아요 삭제
 
-> 특정 상품을 관심 목록에서 삭제합니다.
-> `{productId}` : `PRODUCT` 테이블의 `prdNo` (상품 번호)
+> 특정 상품을 유저의 좋아요 목록에서 삭제합니다. 
 
 ### 🛎️ Request Body
 
-```json
 
-```
-
-필요한 설명 있으면 여기에 텍스트 추가하고 아니면 표만 작성해주세요
-
-| 필드     | 타입   | 최대 길이 | 필수 / 선택 | 설명 |
-| -------- | ------ | --------- | ----------- | ---- |
-| `필드명` | String | 100       | 필수        | 설명 |
-|          |        |           |             |      |
+| 필드        | 타입     | 최대 길이 | 필수 / 선택 | 설명                       |
+| ----------- | -------- | --------- | ----------- | -------------------------- |
+| `Path Parameter` | Long |   | 필수 | 삭제할 상품 고유 ID |
+| `type` | String |  | 선택 | 좋아요 유형 (기본값: PRODUCT) |
 
 ### 💬 Response Example
 
 ```json
-
+{
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-11-04 16:30:00",
+  "data": [
+    {
+      "likeId": 501,
+      "itemId": 10,
+      "name": "카밍 수딩 마스크",
+      "brand": "시크릿 네이처",
+      "price": 32000,
+      "imageUrl": "https://.../mask_img.jpg",
+      "likeDate": "2025-12-16"
+    },
+    {
+      "likeId": 502,
+      "itemId": 20,
+      "name": "에너지 부스팅 세럼",
+      "brand": "퓨어 바이탈",
+      "price": 45000,
+      "imageUrl": "https://.../serum_img.jpg",
+      "likeDate": "2025-12-15"
+    }
+  ]
+}
 ```
+---
 
-필요한 설명 있으면 여기에 텍스트 추가하고 아니면 표만 작성해주세요
+### [GET] `/api/likes/{productId}/exists` : 좋아요 상태 확인
 
-| 필드     | 타입   | 최대 길이 | 설명 |
-| -------- | ------ | --------- | ---- |
-| `필드명` | String | 100       | 설명 |
-|          |        |           |      |
+> 특정 상품이 유저의 좋아요 목록에 포함되어 있는지 확인합니다.
 
+
+| 필드        | 타입     | 최대 길이 | 필수 / 선택 | 설명                       |
+| ----------- | -------- | --------- | ----------- | -------------------------- |
+| `Path Parameter` | Long |   | 필수 | 확인할 상품 고유 ID |
+| `type` | String |  | 선택 | 좋아요 유형 (기본값: PRODUCT) |
+
+
+### 💬 Response Example
+
+```json
+{
+  "resultCode": 200,
+  "resultMsg": "SUCCESS",
+  "resultTime": "2025-11-04 16:30:00",
+  "data": true 
+}
+```
 ---
 
 ## 3.5. 성분
@@ -1452,6 +1407,88 @@
 | -------- | ------ | --------- | ---- |
 | `필드명` | String | 100       | 설명 |
 |          |        |           |      |
+
+---
+
+## 3.7. 결제
+
+### 기본 정보
+
+> Base URL:  8080/api/payments
+
+> 인증 방식: Bearer Token (Authorization 헤더 필수)
+ ### 💬 공통 응답 구조
+
+- 성공 시 : 200 OK 및 데이터 반환
+- 실패 시 : 400 Bad Request 및 에러 메시지 반환
+
+---
+
+### [POST] `/order` : 주문 생성
+
+> 결제하기 전, 서버에 주문 정보를 저장하고 주문 고유 번호 (odNo)를 발급받습니다.
+
+> Authentication 필수
+
+### 🛎️ Request Body
+
+| 필드     | 타입   | 최대 길이 | 필수 / 선택 | 설명 |
+| -------- | ------ | --------- | ----------- | ---- |
+| `receiverName` | String |  | 필수 | 수령인 성함 |
+| `receiverPhone` | String |  | 필수 | 수령인 연락처 |
+| `zipCode` | Integer |  | 필수 | 우편번호 |
+| `roadAddress` | String |  | 필수 | 도로명 주소 |
+| `detailAddress` | String |  | 필수 | 상세 주소 |
+| `deliveryMsg` | String |  | 선택 | 배송 요청 사항 |
+| `totalAmount` | Long |  | 필수 | 최종 결제 금액 (상품가 + 배송비) |
+| `deliveryFee` | Long |  | 필수 | 배송비 |
+| `orderName` | String |  | 필수 |  주문명 |
+| `items` | Array |  | 필수 | 주문 상품 목록 (prdNo, quantity, price 포함) |
+
+### 💬 Response Example
+
+```json
+75 // 발급된 주문 번호 odNo를 숫자로 반환
+```
+
+---
+
+### [POST] `/confirm` : 결제 승인 
+
+> 토스 결제 창을 통해 결제가 완료된 후, FE에서 받은 paymentKey등을 서버로 전달해 최종 결제 승인을 요청합니다.
+
+### 🛎️ Request Body
+
+| 필드     | 타입   | 최대 길이 | 필수 / 선택 | 설명 |
+| -------- | ------ | --------- | ----------- | ---- |
+| `paymentKey` | String |  | 필수 | 토스에서 발급한 결제 고유 키 |
+| `orderId` | String |  | 필수 | 발급 받은 주문 번호 (odNo) |
+| `amount` | Long |  | 필수 | 실제 결제된 금액 |
+
+### 💬 Response Example
+
+```json
+"결제 승인 완료"
+```
+
+---
+
+### [POST] `/cancel` : 결제 취소 및 환불
+
+> 이미 완료된 결제 건에 대한 취소를 진행합니다.
+
+### 🛎️ Request Body
+
+| 필드     | 타입   | 최대 길이 | 필수 / 선택 | 설명 |
+| -------- | ------ | --------- | ----------- | ---- |
+| `odNo` | Long |  | 필수 | 취소할 주문 번호 |
+| `cancelReason` | String |  | 선택 | 취소 사유 (미입력 시 "상품 단순 변심") |
+
+### 💬 Response Example
+
+```json
+"결제 취소(환불) 완료"
+```
 
 ---
 
